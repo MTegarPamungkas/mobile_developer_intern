@@ -13,6 +13,8 @@ class TextConstants {
   static const String thirdScreen = 'Third Screen';
   static const String selectedUserName = 'Selected User Name';
   static const String noUserSelected = 'No user selected';
+  static const String noDataAvailable = 'No Data Available';
+  static const String noMoreData = 'No More Data';
   static const String unknownError = 'Unknown error';
   static const String unexpectedDataFormat = 'Unexpected data format';
   static const String reload = 'Reload';

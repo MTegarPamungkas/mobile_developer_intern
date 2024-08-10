@@ -27,12 +27,31 @@ class UserPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: controller.obx(
-        (users) => ListView.builder(
-          itemCount: users?.length ?? 0,
-          itemBuilder: (context, index) {
-            final user = users![index];
-            return userCard(user: user);
-          },
+        (users) => RefreshIndicator(
+          onRefresh: controller.refreshUsers,
+          child: ListView.builder(
+            itemCount: (users?.length ?? 0) + 1,
+            itemBuilder: (context, index) {
+              if (index == users?.length) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Text(
+                      TextConstants.noMoreData,
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+
+              if (index == (users?.length ?? 0) - 1) {
+                controller.loadNextPage();
+              }
+
+              final user = users![index];
+              return userCard(user: user);
+            },
+          ),
         ),
         onLoading: const Center(child: CircularProgressIndicator()),
         onError: (error) => Center(
@@ -44,6 +63,22 @@ class UserPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => controller.fetchUsers(),
                 child: const Text(TextConstants.reload),
+              ),
+            ],
+          ),
+        ),
+        onEmpty: RefreshIndicator(
+          onRefresh: controller.refreshUsers,
+          child: ListView(
+            children: const [
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text(
+                    TextConstants.noDataAvailable,
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ),
               ),
             ],
           ),

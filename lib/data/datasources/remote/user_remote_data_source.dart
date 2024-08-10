@@ -6,7 +6,7 @@ import 'package:mobile_developer_intern/core/network/dio_client.dart';
 import 'package:mobile_developer_intern/data/models/user_model.dart';
 
 abstract class UserRemoteDataSource {
-  Future<List<UserModel>> getUsers();
+  Future<List<UserModel>> getUsers({int page = 1, int perPage = 10});
 }
 
 class UserRemoteDataSourceImpl implements UserRemoteDataSource {
@@ -15,9 +15,10 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   UserRemoteDataSourceImpl({required this.dioClient});
 
   @override
-  Future<List<UserModel>> getUsers() async {
+  Future<List<UserModel>> getUsers({int page = 1, int perPage = 10}) async {
     try {
-      final response = await dioClient.get(ApiConstants.getUsers);
+      final response = await dioClient
+          .get(ApiConstants.getUsers(page: page, perPage: perPage));
 
       if (response?.statusCode == 200) {
         final data = response?.data['data'];

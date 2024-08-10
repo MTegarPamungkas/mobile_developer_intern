@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:mobile_developer_intern/core/error/exceptions.dart';
 import 'package:mobile_developer_intern/core/error/failures.dart';
+import 'package:mobile_developer_intern/core/error/exceptions.dart';
 import 'package:mobile_developer_intern/data/datasources/remote/user_remote_data_source.dart';
 import 'package:mobile_developer_intern/domain/entities/user.dart';
 import 'package:mobile_developer_intern/domain/repositories/user_repository.dart';
@@ -16,10 +16,11 @@ class UserRepositoryImpl implements UserRepository {
   });
 
   @override
-  Future<Either<Failure, List<User>>> getUsers() async {
+  Future<Either<Failure, List<User>>> getUsers(int page, int perPage) async {
     if (await networkInfo.isConnected) {
       try {
-        final remoteUsers = await remoteDataSource.getUsers();
+        final remoteUsers =
+            await remoteDataSource.getUsers(page: page, perPage: perPage);
         return Right(remoteUsers);
       } on ServerException {
         return Left(ServerFailure());
